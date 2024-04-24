@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.Scanner;
+import java.util.Date;
 
 public class EmployeeManagementSystem {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/employeeData";
