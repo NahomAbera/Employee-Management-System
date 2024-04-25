@@ -15,6 +15,7 @@ public class Main {
             SearchEmployee mySearchEmployee = new SearchEmployee(myEmployeeDatabase);
             DeleteEmployee myDeleteEmployee = new DeleteEmployee(myEmployeeDatabase);
             AddEmployee myAddEmployee = new AddEmployee(myEmployeeDatabase);
+            AddSsnColumnInDatabase myAddSsnColumnInDatabase = new AddSsnColumnInDatabase(myEmployeeDatabase);
             FullTimeEmployeeReport myFullTimeEmployeeReport = new FullTimeEmployeeReport(myEmployeeDatabase);
 
             int choice;
@@ -25,9 +26,10 @@ public class Main {
                 System.out.println("3. Search Employee");
                 System.out.println("4. Update Employee Data");
                 System.out.println("5. Update Employee Salary Range");
-                System.out.println("6. Full Time Employee Information with past payrol history");
-                System.out.println("7. Generate Reports by Division or Job Titles");
-                System.out.println("8. Exit");
+                System.out.println("6. Add SSN Column to Database");
+                System.out.println("7. Full Time Employee Information with past payroll history");
+                System.out.println("8. Generate Reports by Division or Job Titles");
+                System.out.println("9. Exit");
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextInt();
                 scanner.nextLine(); 
@@ -49,18 +51,21 @@ public class Main {
                         myUpdateEmployee.updateEmployeeSalaryRange(scanner);
                         break;
                     case 6:
+                        myAddSsnColumnInDatabase.addSSNColumn();
+                        break;
+                        case 7:
                         myFullTimeEmployeeReport.generateFullTimeEmployeeReport();
                         break;
-                    case 7:
+                    case 8:
                         myReportGeneratorByJobTitleOrDivision.showMenu();
                         break;
-                    case 8:
+                    case 9:
                         System.out.println("\nGood Bye!\n");
                         break;
                     default:
                         System.out.println("Invalid choice. Please enter a number between 1 and 6.");
                 }
-            } while (choice != 8);
+            } while (choice != 9);
         } catch (SQLException e) {
             e.printStackTrace();
         }
