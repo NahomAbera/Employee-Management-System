@@ -115,7 +115,7 @@ class EmployeeManagement {
             pstmt.setString(2, firstName);
             pstmt.setString(3, lastName);
             pstmt.setString(4, email);
-            pstmt.setDate(5, Date.valueOf(hireDate));
+            pstmt.setDate(5, java.sql.Date.valueOf(hireDate));
             pstmt.setDouble(6, salary);
             pstmt.setString(7, ssn);
             employeeDatabase.executeUpdate(pstmt);
