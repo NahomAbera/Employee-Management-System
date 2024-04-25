@@ -1,7 +1,7 @@
-import java.sql.*;
+import java.sql.*; // imports the sql java package containing the JDBC database access
 
 public class EmployeeDatabase {
-    final Connection connection;
+    final Connection connection;  // connection to the database
 
     EmployeeDatabase(Connection connection) {
         this.connection = connection;
