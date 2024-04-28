@@ -1,6 +1,8 @@
 import java.sql.*;
-public class FullTimeEmployeeReport extends EmployeeReport {
-    public FullTimeEmployeeReport(EmployeeDatabase employeeDatabase) {
+
+public class PartTimeEmployeeReport extends EmployeeReport {
+    // Constructor
+    public PartTimeEmployeeReport(EmployeeDatabase employeeDatabase) {
         super(employeeDatabase);
     }
 
@@ -11,14 +13,14 @@ public class FullTimeEmployeeReport extends EmployeeReport {
                 "FROM employees e  " +
                 "JOIN employee_job_titles ejt ON e.empid = ejt.empid " +
                 "JOIN job_titles jt ON ejt.job_title_id = jt.job_title_id  " +
-                "WHERE e.empid IN (SELECT empid FROM payroll) " + // Filter for only full-time employees
+                "WHERE e.empid IN (SELECT empid FROM part_time_payroll) " + // Filter for only part-time employees
                 "ORDER BY e.empid ; ";
 
         try {
             PreparedStatement pstmt = employeeDatabase.connection.prepareStatement(sqlcommand);
             ResultSet myRS = employeeDatabase.executeQuery(pstmt);
             if (!myRS.next()) {
-                System.out.println("No full-time employees found.");
+                System.out.println("No part-time employees found.");
                 return;
             }
             do {
@@ -26,7 +28,7 @@ public class FullTimeEmployeeReport extends EmployeeReport {
                 output.append("Title=" + myRS.getString("jt.job_title") + "     " + myRS.getString("e.email") + "\n");
                 System.out.print(output.toString());
                 output.setLength(0);
-                Payroll p1 = new Payroll(employeeDatabase);
+                PartTimePayroll p1 = new PartTimePayroll(employeeDatabase);
                 output.append(p1.getPayByMonth(myRS.getInt("e.empid")));
             } while (myRS.next());
         } catch (SQLException e) {
@@ -35,22 +37,23 @@ public class FullTimeEmployeeReport extends EmployeeReport {
     }
 }
 
-class Payroll {
+
+
+class PartTimePayroll {
     private final EmployeeDatabase employeeDatabase;
 
-    public Payroll(EmployeeDatabase employeeDatabase) {
+    public PartTimePayroll(EmployeeDatabase employeeDatabase) {
         this.employeeDatabase = employeeDatabase;
     }
 
     public StringBuilder getPayByMonth(int empID) {
         StringBuilder output = new StringBuilder("");
-        String sqlcommand1 = "SELECT e.empid, p.pay_date, p.earnings, p.fed_tax, " +
-        "p.fed_med, p.fed_SS, p.state_tax, p.retire_401k, p.health_care, p.health_cost " + 
-        "FROM employees e " +
-        "JOIN payroll p ON e.empid = p.empid " +
-        "WHERE e.empid = ? " +
-        "ORDER BY p.pay_date;";
-
+        String sqlcommand1 = "SELECT e.empid, p.pay_date, p.hours_worked, p.hourly_wage, " +
+                "p.fed_tax,p.fed_med,p.fed_SS,p.state_tax " +
+                "FROM employees e " +
+                "JOIN part_time_payroll p ON e.empid = p.empid " +
+                "WHERE e.empid = ? " +
+                "ORDER BY p.pay_date;";
         try {
             PreparedStatement pstmt = employeeDatabase.connection.prepareStatement(sqlcommand1);
             pstmt.setInt(1, empID);
@@ -59,14 +62,13 @@ class Payroll {
                 // If no payroll data found for this employee, return empty string
                 return output;
             }
-            output.append("\tEMP ID\tPAY DATE\tGROSS\tFederal\tFedMed\tFedSS\tState\t401K\tHealthCare\tHealthCost\n");
+            output.append("\tEMP ID\tPAY DATE\tHOURS WORKED\tHOURLY WAGE\tFederal\tFedMed\tFedSS\tState\n");
             do {
                 output.append("\t" + myRS1.getString("e.empid") + "\t");
-                output.append(myRS1.getDate("p.pay_date") + "\t" + myRS1.getDouble("p.earnings") + "\t");
-                output.append(myRS1.getDouble("p.fed_tax") + "\t" + myRS1.getDouble("p.fed_med") + "\t");
-                output.append(myRS1.getDouble("p.fed_SS") + "\t" + myRS1.getDouble("p.state_tax") + "\t");
-                output.append(myRS1.getDouble("p.retire_401K") + "\t" + myRS1.getDouble("p.health_care")+"\t\t" );
-                output.append(myRS1.getDouble("p.health_cost") + "\n");
+                output.append(myRS1.getDate("p.pay_date") + "\t" + myRS1.getDouble("p.hours_worked") + "\t");
+                output.append(myRS1.getDouble("p.hourly_wage") + "\t" + myRS1.getDouble("p.fed_tax") + "\t");
+                output.append(myRS1.getDouble("p.fed_med") + "\t" + myRS1.getDouble("p.fed_SS") + "\t");
+                output.append(myRS1.getDouble("p.state_tax") + "\n");
             } while (myRS1.next());
             System.out.println(output.toString());
             output.setLength(0);
@@ -76,3 +78,4 @@ class Payroll {
         return output;
     }
 }
+
