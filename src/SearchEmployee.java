@@ -45,7 +45,8 @@ public class SearchEmployee {
                 String email = resultSet.getString("email");
                 Date hireDate = resultSet.getDate("HireDate");
                 double salary = resultSet.getDouble("Salary");
-                String ssn = resultSet.getString("SSN");
+                String address = resultSet.getString("address");
+                Date dob = resultSet.getDate("date_of_birth");
     
                 System.out.println("\nEmployee ID: " + empId);
                 System.out.println("First Name: " + firstName);
@@ -53,11 +54,19 @@ public class SearchEmployee {
                 System.out.println("Email: " + email);
                 System.out.println("Hire Date: " + hireDate);
                 System.out.println("Salary: " + salary);
-                if (isSSNColumnAvailable()) {
-                    System.out.println("SSN: " + ssn);
-                } else {
-                    System.out.println("SSN column is not available.");
+                if (address != null) {
+                    System.out.println("Address: " + address);
                 }
+                if (dob != null) {
+                    System.out.println("Date of Birth: " + dob);
+                }
+                if (isSSNColumnAvailable()) {
+                    String ssn = resultSet.getString("SSN");
+                    if (ssn != null) {
+                        System.out.println("SSN: " + ssn);
+                    }
+                }
+                
             }
             if (!found) {
                 System.out.println("No employee found matching the search criteria.");
