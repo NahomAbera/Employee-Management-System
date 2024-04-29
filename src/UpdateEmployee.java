@@ -1,13 +1,27 @@
 import java.util.Scanner;
 import java.sql.*;
 
+
+/**
+ * This class provides methods to update various details of an employee in the database.
+ */
 class UpdateEmployee {
     private final EmployeeDatabase employeeDatabase;
 
+    /**
+     * Constructs an UpdateEmployee object with a reference to an EmployeeDatabase.
+     * @param employeeDatabase The EmployeeDatabase object to interact with the database.
+     */
     UpdateEmployee(EmployeeDatabase employeeDatabase) {
         this.employeeDatabase = employeeDatabase;
     }
 
+    /**
+     * Updates the data of an employee based on user input. Users can update email, salary, job title, address, 
+     * date of birth, and SSN if applicable.
+     * @param scanner The scanner object to receive input from the user.
+     * @throws SQLException If an SQL error occurs during the update process.
+     */
     void updateEmployeeData(Scanner scanner) throws SQLException {
         System.out.print("Enter Employee ID for update: ");
         int empId = scanner.nextInt();
@@ -61,6 +75,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Updates the email of a specific employee.
+     * @param empId The employee ID for which to update the email.
+     * @param scanner The scanner object to receive the new email from the user.
+     */
     private void updateEmail(int empId, Scanner scanner) {
         System.out.print("Enter new email: ");
         String email = scanner.nextLine();
@@ -75,6 +94,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Updates the salary of a specific employee.
+     * @param empId The employee ID for which to update the salary.
+     * @param scanner The scanner object to receive the new salary from the user.
+     */
     private void updateSalary(int empId, Scanner scanner) {
         System.out.print("Enter new salary: ");
         double salary = scanner.nextDouble();
@@ -91,6 +115,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Updates the job title of a specific employee.
+     * @param empId The employee ID for which to update the job title.
+     * @param scanner The scanner object to receive the new job title from the user.
+     */
     private void updateJobTitle(int empId, Scanner scanner) {
         System.out.print("Enter new job title: ");
         String jobTitle = scanner.nextLine();
@@ -108,6 +137,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Updates the Social Security Number (SSN) of a specific employee, if the SSN column is available.
+     * @param empId The employee ID for which to update the SSN.
+     * @param scanner The scanner object to receive the new SSN from the user.
+     */
     private void updateSSN(int empId, Scanner scanner) {
         System.out.print("Enter new SSN: ");
         String ssn = scanner.nextLine();
@@ -121,6 +155,11 @@ class UpdateEmployee {
             System.out.println("Failed to update employee SSN: " + e.getMessage());
         }
     }
+
+    /**
+     * Updates the salaries of all employees within a specified salary range by a given percentage.
+     * @param scanner The scanner object to receive the salary range and increase percentage from the user.
+     */
     void updateEmployeeSalaryRange(Scanner scanner) {
         System.out.print("Enter minimum salary: ");
         double minSalary = scanner.nextDouble();
@@ -142,6 +181,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Updates the address of a specific employee.
+     * @param empId The employee ID for which to update the address.
+     * @param scanner The scanner object to receive the new address from the user.
+     */
     private void updateAddress(int empId, Scanner scanner) {
         System.out.print("Enter new address: ");
         String address = scanner.nextLine();
@@ -156,6 +200,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Updates the date of birth of a specific employee.
+     * @param empId The employee ID for which to update the date of birth.
+     * @param scanner The scanner object to receive the new date of birth from the user.
+     */
     private void updateDateOfBirth(int empId, Scanner scanner) {
         System.out.print("Enter new date of birth (YYYY-MM-DD): ");
         String dob = scanner.nextLine();
@@ -170,6 +219,11 @@ class UpdateEmployee {
         }
     }
 
+    /**
+     * Checks if an employee exists in the database.
+     * @param empId The employee ID to check.
+     * @return true if the employee exists, false otherwise.
+     */
     private boolean employeeExists(int empId) {
         try {
             String query = "SELECT COUNT(*) AS count FROM employees WHERE empid = ?";
@@ -188,5 +242,3 @@ class UpdateEmployee {
         return false;
     }
 }
-
-
