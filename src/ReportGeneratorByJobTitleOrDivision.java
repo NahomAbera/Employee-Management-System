@@ -2,15 +2,30 @@ import java.sql.*;
 import java.util.Scanner;
 import java.math.BigDecimal;
 
+/**
+ * The ReportGeneratorByJobTitleOrDivision class provides an interface to generate reports based on job titles or divisions.
+ * It enables users to choose between generating detailed reports on total pay by job title or by division.
+ */
 public class ReportGeneratorByJobTitleOrDivision {
     private final Scanner scanner;
     private EmployeeDatabase employeeDatabase;
 
+    /**
+     * Constructs a ReportGeneratorByJobTitleOrDivision object.
+     * 
+     * @param employeeDatabase the database connection handler used for SQL queries.
+     * @param scanner the Scanner instance to receive user input.
+     */
     public ReportGeneratorByJobTitleOrDivision(EmployeeDatabase employeeDatabase, Scanner scanner) {
         this.employeeDatabase = employeeDatabase;
         this.scanner = scanner;
     }
 
+    /**
+     * Displays a menu to choose the type of report to generate and handles user inputs to navigate through the options.
+     * 
+     * @throws SQLException if an SQL error occurs while performing database operations.
+     */
     public void showMenu() throws SQLException {
         boolean exit = false;
         while (!exit) {
@@ -21,7 +36,7 @@ public class ReportGeneratorByJobTitleOrDivision {
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();  // clear the buffer
 
             switch (choice) {
                 case 1:
@@ -40,6 +55,9 @@ public class ReportGeneratorByJobTitleOrDivision {
         }
     }
 
+    /**
+     * Generates and displays a report summarizing the total pay by job title. It lists available job titles and prompts the user to select one for detailed report.
+     */
     public void generateTotalPayByJobTitleReport() {
         System.out.println("\nAvailable Job Titles:");
         listJobTitles();  // List all job titles for user selection
@@ -77,8 +95,6 @@ public class ReportGeneratorByJobTitleOrDivision {
                 BigDecimal totalPay = resultSet.getBigDecimal("TotalPay");
                 
                 System.out.printf("%s\t%d\t%-15s%s\t%s\t%s\t%.2f\t%.2f%n", jobTitle, empId, firstName, lastName, email, hireDate.toString(), salary, totalPay);
-                Payroll payrollProcessor = new Payroll(employeeDatabase);
-                System.out.println(payrollProcessor.getPayByMonth(empId));
             }
             
             System.out.println("----------------------------------------------------------------------------------------------");
@@ -87,8 +103,13 @@ public class ReportGeneratorByJobTitleOrDivision {
         }
     }
     
-    
-
+    /**
+    * This method generates a detailed report of total pay by division. It begins by listing all available divisions 
+    * and prompts the user to select one by entering the division ID. After fetching the selected division's details,
+    * it retrieves and displays all associated employees along with their personal and salary information. Additionally, 
+    * it calculates the monthly pay for each employee. The method handles any SQL exceptions and ensures that meaningful 
+    * error messages are displayed if no division or employees are found or if an SQL error occurs.
+    */
     public void generateTotalPayByDivisionReport() {
         System.out.println("\nAvailable Divisions:");
         listDivisions();  // List all divisions for user selection
@@ -167,6 +188,10 @@ public class ReportGeneratorByJobTitleOrDivision {
         }
     }
 
+    /**
+    * Retrieves and lists all job titles from the database. Each job title is displayed alongside its corresponding ID.
+    * The method handles SQL exceptions and outputs any errors encountered during the database query process.
+    */
     private void listJobTitles() {
         String query = "SELECT job_title_id, job_title FROM job_titles";
         try (PreparedStatement pstmt = employeeDatabase.connection.prepareStatement(query);
@@ -181,6 +206,10 @@ public class ReportGeneratorByJobTitleOrDivision {
         }
     }
 
+    /**
+    * Retrieves and lists all divisions from the database, showing each division's name along with its ID. 
+    * It handles SQL exceptions and provides error messages if issues occur during the database access.
+    */
     private void listDivisions() {
         String query = "SELECT ID, Name FROM division";
         try (PreparedStatement pstmt = employeeDatabase.connection.prepareStatement(query);
