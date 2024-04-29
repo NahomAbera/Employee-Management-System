@@ -18,6 +18,7 @@ public class Main {
             AddSsnColumnInDatabase myAddSsnColumnInDatabase = new AddSsnColumnInDatabase(myEmployeeDatabase);
             FullTimeEmployeeReport myFullTimeEmployeeReport = new FullTimeEmployeeReport(myEmployeeDatabase);
             PartTimeEmployeeReport myPartTimeEmployeeReport = new PartTimeEmployeeReport(myEmployeeDatabase);
+            UpdateEmployeeDivision myUpdateEmployeeDivision = new UpdateEmployeeDivision(myEmployeeDatabase);
 
             int choice;
             do {
@@ -26,12 +27,13 @@ public class Main {
                 System.out.println("2. Remove Employee");
                 System.out.println("3. Search Employee");
                 System.out.println("4. Update Employee Data");
-                System.out.println("5. Update Employee Salary Range");
-                System.out.println("6. Add SSN Column to Database");
-                System.out.println("7. Full Time Employee Information with past payroll history");
-                System.out.println("8. Part Time Employee Information with past payroll history");
-                System.out.println("9. Generate Reports by Division or Job Titles");
-                System.out.println("10. Exit");
+                System.out.println("5. Update Employee Division");
+                System.out.println("6. Update Employee Salary Range");
+                System.out.println("7. Add SSN Column to Database");
+                System.out.println("8. Full Time Employee Information with past payroll history");
+                System.out.println("9. Part Time Employee Information with past payroll history");
+                System.out.println("10. Generate Reports by Division or Job Titles");
+                System.out.println("11. Exit");
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextInt();
                 scanner.nextLine(); 
@@ -50,27 +52,30 @@ public class Main {
                         myUpdateEmployee.updateEmployeeData(scanner);
                         break;
                     case 5:
-                        myUpdateEmployee.updateEmployeeSalaryRange(scanner);
+                        myUpdateEmployeeDivision.updateEmployeeDivision(scanner);
                         break;
                     case 6:
-                        myAddSsnColumnInDatabase.addSSNColumn();
+                        myUpdateEmployee.updateEmployeeSalaryRange(scanner);
                         break;
                     case 7:
-                        myFullTimeEmployeeReport.generateEmployeeReport();
+                        myAddSsnColumnInDatabase.addSSNColumn();
                         break;
                     case 8:
-                        myPartTimeEmployeeReport.generateEmployeeReport();
+                        myFullTimeEmployeeReport.generateEmployeeReport();
                         break;
                     case 9:
-                        myReportGeneratorByJobTitleOrDivision.showMenu();
+                        myPartTimeEmployeeReport.generateEmployeeReport();
                         break;
                     case 10:
+                        myReportGeneratorByJobTitleOrDivision.showMenu();
+                        break;
+                    case 11:
                         System.out.println("\nGood Bye!\n");
                         break;
                     default:
                         System.out.println("Invalid choice. Please enter a number between 1 and 6.");
                 }
-            } while (choice != 10);
+            } while (choice != 11);
         } catch (SQLException e) {
             e.printStackTrace();
         }
