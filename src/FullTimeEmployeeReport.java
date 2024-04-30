@@ -1,9 +1,25 @@
 import java.sql.*;
+
+/**
+ * The FullTimeEmployeeReport class extends the EmployeeReport abstract class to provide a specific
+ * implementation for generating and displaying reports of full-time employees and their corresponding payroll data.
+ */
 public class FullTimeEmployeeReport extends EmployeeReport {
+
+    /**
+     * Constructs a FullTimeEmployeeReport object with a given EmployeeDatabase instance.
+     * 
+     * @param employeeDatabase The database handler for employee data.
+     */
     public FullTimeEmployeeReport(EmployeeDatabase employeeDatabase) {
         super(employeeDatabase);
     }
 
+    /**
+     * Generates and prints a detailed report of all full-time employees including their personal information
+     * and detailed monthly payroll data. It queries the database for employees who have payroll entries,
+     * indicating full-time status, and prints out each individual's job title, email, and payroll details.
+     */
     @Override
     public void generateEmployeeReport() {
         StringBuilder output = new StringBuilder("");
@@ -11,7 +27,7 @@ public class FullTimeEmployeeReport extends EmployeeReport {
                 "FROM employees e  " +
                 "JOIN employee_job_titles ejt ON e.empid = ejt.empid " +
                 "JOIN job_titles jt ON ejt.job_title_id = jt.job_title_id  " +
-                "WHERE e.empid IN (SELECT empid FROM payroll) " + // Filter for only full-time employees
+                "WHERE e.empid IN (SELECT empid FROM payroll) " +
                 "ORDER BY e.empid ; ";
 
         try {
@@ -35,13 +51,28 @@ public class FullTimeEmployeeReport extends EmployeeReport {
     }
 }
 
+/**
+ * The Payroll class handles the retrieval and formatting of payroll data for individual employees.
+ */
 class Payroll {
     private final EmployeeDatabase employeeDatabase;
 
+    /**
+     * Constructs a Payroll object with a given EmployeeDatabase instance.
+     * 
+     * @param employeeDatabase The database handler for employee data.
+     */
     public Payroll(EmployeeDatabase employeeDatabase) {
         this.employeeDatabase = employeeDatabase;
     }
 
+    /**
+     * Retrieves and formats the payroll data for a specific employee by their employee ID.
+     * The method queries the database for payroll details and formats them in a tabulated string format.
+     * 
+     * @param empID The employee ID for which payroll data is to be retrieved.
+     * @return A StringBuilder object containing formatted payroll data.
+     */
     public StringBuilder getPayByMonth(int empID) {
         StringBuilder output = new StringBuilder("");
         String sqlcommand1 = "SELECT e.empid, p.pay_date, p.earnings, p.fed_tax, " +
@@ -56,8 +87,7 @@ class Payroll {
             pstmt.setInt(1, empID);
             ResultSet myRS1 = employeeDatabase.executeQuery(pstmt);
             if (!myRS1.next()) {
-                // If no payroll data found for this employee, return empty string
-                return output;
+                return output; // If no payroll data found, return an empty StringBuilder
             }
             output.append("\tEMP ID\tPAY DATE\tGROSS\tFederal\tFedMed\tFedSS\tState\t401K\tHealthCare\tHealthCost\n");
             do {

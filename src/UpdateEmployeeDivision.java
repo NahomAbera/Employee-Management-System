@@ -1,13 +1,26 @@
 import java.util.Scanner;
 import java.sql.*;
 
+/**
+ * This class provides methods to update the division of an employee in the database.
+ */
 public class UpdateEmployeeDivision {
     private final EmployeeDatabase employeeDatabase;
 
+    /**
+     * Constructs an UpdateEmployeeDivision object with a reference to an EmployeeDatabase.
+     * @param employeeDatabase The EmployeeDatabase object used to interact with the database.
+     */
     public UpdateEmployeeDivision(EmployeeDatabase employeeDatabase) {
         this.employeeDatabase = employeeDatabase;
     }
 
+    /**
+     * Updates the division assignment for an employee. This method allows the user to either update an existing
+     * division assignment or assign a new division to an employee if they currently do not have one.
+     * The method ensures the division and employee exist before attempting any updates.
+     * @param scanner The scanner object to receive input from the user.
+     */
     public void updateEmployeeDivision(Scanner scanner) {
         System.out.print("Enter Employee ID: ");
         int empId = scanner.nextInt();
@@ -44,6 +57,9 @@ public class UpdateEmployeeDivision {
         }
     }
 
+    /**
+     * Lists all available divisions from the database, displaying each one's ID and name.
+     */
     private void listAvailableDivisions() {
         String query = "SELECT ID, Name FROM division";
         try (PreparedStatement pstmt = employeeDatabase.connection.prepareStatement(query);
@@ -58,6 +74,11 @@ public class UpdateEmployeeDivision {
         }
     }
 
+    /**
+     * Checks if a division exists in the database based on the division ID.
+     * @param divisionId The division ID to check.
+     * @return true if the division exists, false otherwise.
+     */
     private boolean divisionExists(int divisionId) {
         try {
             String query = "SELECT COUNT(*) AS count FROM division WHERE ID = ?";
@@ -76,6 +97,11 @@ public class UpdateEmployeeDivision {
         return false;
     }
 
+    /**
+     * Retrieves the current division ID for an employee.
+     * @param empId The employee ID whose division is to be retrieved.
+     * @return The division ID if found, -1 otherwise.
+     */
     private int getCurrentDivision(int empId) {
         try {
             String query = "SELECT div_ID FROM employee_division WHERE empid = ?";
@@ -93,6 +119,13 @@ public class UpdateEmployeeDivision {
         return -1;
     }
 
+    /**
+     * Updates the division assignment for an existing employee to a new division.
+     * Handles database transactions to ensure data integrity.
+     * @param empId The employee ID to update.
+     * @param divisionId The new division ID to assign.
+     * @return true if the update was successful, false otherwise.
+     */
     private boolean updateDivision(int empId, int divisionId) {
         boolean success = false;
         try {
@@ -131,7 +164,12 @@ public class UpdateEmployeeDivision {
         return success;
     }
 
-
+    /**
+     * Assigns a new division to an employee who currently does not have a division assigned.
+     * @param empId The employee ID to assign a new division.
+     * @param divisionId The division ID to assign.
+     * @return true if the assignment was successful, false otherwise.
+     */
     private boolean assignNewDivision(int empId, int divisionId) {
         boolean success = false;
         try {
@@ -147,7 +185,12 @@ public class UpdateEmployeeDivision {
         }
         return success;
     }
-
+    
+    /**
+     * Checks if an employee exists in the database.
+     * @param empId The employee ID to check.
+     * @return true if the employee exists, false otherwise.
+     */
     private boolean employeeExists(int empId) {
         try {
             String query = "SELECT COUNT(*) AS count FROM employees WHERE empid = ?";
