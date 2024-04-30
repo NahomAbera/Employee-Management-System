@@ -5,14 +5,10 @@ import java.sql.*; // imports the sql java package containing the JDBC database 
  * It provides methods for executing updates and queries, as well as checking for the existence of specific database columns.
  */
 public class EmployeeDatabase {
-<<<<<<< HEAD
     /**
      * The connection to the database used for executing SQL statements.
      */
     final Connection connection;
-=======
-    final Connection connection;  // connection to the database
->>>>>>> ff16d24759a930b887778196e452dfba6cf9dab2
 
     /**
      * Constructs an EmployeeDatabase object with an existing database connection.
