@@ -66,10 +66,6 @@ public class Main {
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextInt();
                 scanner.nextLine(); 
-<<<<<<< HEAD
-                System.out.println("\nPress Enter to clear the screen...\n");
-=======
->>>>>>> ff16d24759a930b887778196e452dfba6cf9dab2
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
 
